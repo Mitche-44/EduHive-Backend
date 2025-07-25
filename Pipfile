@@ -13,6 +13,9 @@ werkzeug = "*"
 python-dotenv = "*"
 sqlalchemy-serializer = "*"
 flask-migrate = "*"
+flask-restful = "*"
+flask-bcrypt = "*"
+pyjwt = "*"
 
 [dev-packages]
 
