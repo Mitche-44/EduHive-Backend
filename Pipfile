@@ -5,17 +5,17 @@ name = "pypi"
 
 [packages]
 werkzeug = "*"
-python-dotenv = "*"
-flask-migrate = "*"
-flask-restful = "*"
-flask-bcrypt = "*"
+psycopg2-binary = "*"
 pyjwt = "*"
 flask = "*"
-flask-jwt-extended = "*"
 flask-sqlalchemy = "*"
+flask-migrate = "*"
+flask-bcrypt = "*"
+python-dotenv = "*"
 flask-cors = "*"
-psycopg2-binary = "*"
+flask-restful = "*"
 sqlalchemy-serializer = "*"
+flask-jwt-extended = "*"
 
 [dev-packages]
 
