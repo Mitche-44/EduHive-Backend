@@ -6,6 +6,7 @@ from resources.admin.users import ApproveUser
 api_bp = Blueprint("api", __name__)
 api = Api(api_bp)
 
+
 api.add_resource(SignupResource, '/auth/register')
 api.add_resource(LoginResource, '/auth/login')
 api.add_resource(MeResource, '/me')
@@ -14,3 +15,8 @@ api.add_resource(LogoutResource, "/logout")
 
 # Admin approving users
 api.add_resource(ApproveUser, "/admin/users/<int:user_id>/approve")
+
+
+# Import your resources here when you create them
+# from .user_resources import UserResource
+# api.add_resource(UserResource, '/users')
