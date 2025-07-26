@@ -1,3 +1,7 @@
+#Custom decorators that give access to routes
+# @role_required("admin")
+# @approved_required
+
 from functools import wraps
 from flask_jwt_extended import verify_jwt_in_request, get_jwt, get_jwt_identity
 from flask import jsonify

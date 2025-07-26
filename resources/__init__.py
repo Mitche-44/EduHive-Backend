@@ -6,8 +6,8 @@ from resources.admin.users import ApproveUser
 api_bp = Blueprint("api", __name__)
 api = Api(api_bp)
 
-api.add_resource(SignupResource, '/signup')
-api.add_resource(LoginResource, '/login')
+api.add_resource(SignupResource, '/auth/register')
+api.add_resource(LoginResource, '/auth/login')
 api.add_resource(MeResource, '/me')
 api.add_resource(ChangePasswordResource, '/change-password')
 api.add_resource(LogoutResource, "/logout")
