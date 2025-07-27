@@ -1,5 +1,8 @@
 from extensions import db, bcrypt
 from sqlalchemy_serializer import SerializerMixin
+from datetime import datetime
+from sqlalchemy.orm import relationship
+from core import db
 
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
@@ -7,10 +10,20 @@ class User(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
+    username = db.Column(db.String(100), unique=True, nullable=False)
+    email = db.Column(db.String(150), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
     role = db.Column(db.String(20), default='learner')
+    joined_at = db.Column(db.DateTime, default=datetime.utcnow)
     is_approved = db.Column(db.Boolean, default=False)
+
+    # Leaderboard fields
+    points = db.Column(db.Integer, default=0)
+    top_activity = db.Column(db.String(50))  # Cached most common activity (optional)
+
+    # Relationships
+    activities = relationship("LearnerActivity", back_populates="learner", cascade="all, delete-orphan")
+    progress = relationship("Progress", back_populates="learner", cascade="all, delete-orphan")
 
     serialize_rules = ('-password_hash',)
 
@@ -27,3 +40,6 @@ class User(db.Model, SerializerMixin):
 
     def __repr__(self):
         return f"<User {self.email}>"
+    
+    # def __repr__(self):
+    #     return f"<User {self.username}>"
