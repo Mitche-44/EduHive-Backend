@@ -7,11 +7,16 @@ class Badge(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     awarded = db.Column(db.Integer, default=0)
-    winners = db.Column(db.Text, nullable=True)  
+    winners = db.Column(db.Text, nullable=True)
     image_url = db.Column(db.String, nullable=False)
 
-    def winner_list(self):
-        """Returns the winners as a list from comma-separated string"""
-        return [w.strip() for w in self.winners.split(',')] if self.winners else []
+    # Exclude winners and use winner_list in the API instead
+    serialize_rules = ('-winners',)
 
-    serialize_rules = ()
+    @property
+    def winner_list(self):
+        """Returns winners as a list from the comma-separated string."""
+        return [winner.strip() for winner in self.winners.split(',')] if self.winners else []
+
+    def __repr__(self):
+        return f"<Badge {self.title}>"

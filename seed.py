@@ -48,7 +48,7 @@ with app.app_context():
     badge6 = Badge(
         title="UX Design",
         awarded=2,
-        winners="Fancy Byegon",
+        winners="Fancy Byegon, Alex Kotut",
         image_url="https://www.googleapis.com/download/storage/v1/b/kaggle-user-content/o/inbox%2F304806%2Fb4f4e39130efa963a447e045350fd6bf%2FAward%20Image-10.svg?generation=1726113967704528&alt=media"
     )
 

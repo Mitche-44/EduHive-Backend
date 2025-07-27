@@ -17,6 +17,7 @@ def create_app():
     # Register JWT callback handlers (after init_app)
     from utils import auth  # this registers the token loaders
 
+
     # Register your API blueprint
     app.register_blueprint(api_bp, url_prefix="/api")
 

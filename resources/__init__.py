@@ -1,6 +1,6 @@
 from flask_restful import Api
 from flask import Blueprint
-from .learner.badges import BadgeListResource, BadgeResource
+from resources.learner.badges import BadgeListResource, BadgeResource
 from resources.auth import SignupResource, LoginResource, MeResource, ChangePasswordResource, LogoutResource
 from resources.admin.users import ApproveUser
 
