@@ -1,4 +1,4 @@
-from core.extensions import db
+from extensions import db
 from datetime import datetime
 
 class Progress(db.Model):
