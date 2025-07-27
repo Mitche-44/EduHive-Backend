@@ -1,3 +1,5 @@
+# add all other models here
+from .badge import Badge
 from .user import User
 from flask import Blueprint
 from flask_restful import Api
@@ -15,3 +17,4 @@ api = Api(api_bp)
 
 # Make them available when importing from models
 __all__ = ['Payment']
+
