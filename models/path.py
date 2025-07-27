@@ -1,8 +1,8 @@
-# core/models/path.py
+# models/path.py
 from datetime import datetime
 from sqlalchemy.orm import relationship
-from core import db
-from utils.mixins import SerializerMixin 
+from extensions import db
+from sqlalchemy_serializer import SerializerMixin
 
 class Path(db.Model, SerializerMixin):
     __tablename__ = "paths"
