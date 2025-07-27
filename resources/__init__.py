@@ -14,7 +14,6 @@ api = Api(api_bp)
 # Register endpoints
 api.add_resource(BadgeListResource, "/badges")
 api.add_resource(BadgeResource, "/badges/<int:badge_id>")
-
 api.add_resource(SignupResource, '/auth/register')
 api.add_resource(LoginResource, '/auth/login')
 api.add_resource(MeResource, '/me')
@@ -24,3 +23,8 @@ api.add_resource(LogoutResource, "/logout")
 # Admin approving users
 api.add_resource(ApproveUser, "/admin/users/<int:user_id>/approve")
 
+
+
+# Import your resources here when you create them
+# from .user_resources import UserResource
+# api.add_resource(UserResource, '/users')
