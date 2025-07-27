@@ -2,11 +2,12 @@
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
 from utils.decorators import role_required
-from core.models.user import User
-from core.models.learner_activity import LearnerActivity
-from core.models.progress import Progress
+from models.user import User
+from models.learner_activity import LearnerActivity
+from models.progress import Progress
 from sqlalchemy import func
-from core.extensions import db
+from extensions import db
+
 
 bp = Blueprint("learner_leaderboard", __name__, url_prefix="/learner/leaderboard")
 
