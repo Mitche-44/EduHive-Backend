@@ -4,6 +4,10 @@ from extensions import db, migrate, bcrypt, cors
 from flask_jwt_extended import JWTManager
 from resources import api_bp
 from models import leaderboard
+from models import newsletter   
+from models import subscription
+from models import testimonial
+
 
 jwt = JWTManager()
 

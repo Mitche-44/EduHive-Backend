@@ -7,6 +7,7 @@ from .payment import Payment
 from .leaderboard import LeaderboardEntry
 from .newsletter import NewsletterSubscriber  # Import the newsletter subscriber model
 from .subscription import Subscription
+from .testimonial import Testimonial
 # from .stats import UserStats
 
 
