@@ -5,6 +5,7 @@ from resources.auth import SignupResource, LoginResource, MeResource, ChangePass
 from resources.admin.users import ApproveUser
 from resources.learner.leaderboard import leaderboard_bp
 from resources.public.newsletter import newsletter_bp
+from resources.learner.subscriptions import subscription_bp
 
 
 api_bp = Blueprint("api", __name__)
@@ -24,6 +25,7 @@ api.add_resource(LogoutResource, "/logout")
 
 api_bp.register_blueprint(leaderboard_bp, url_prefix="/leaderboard")# Register the leaderboard blueprint
 api_bp.register_blueprint(newsletter_bp, url_prefix="/newsletter")  # Register the newsletter blueprint
+api_bp.register_blueprint(subscription_bp, url_prefix="/subscription")  # Register the subscription blueprint
 
 
 # Admin approving users
