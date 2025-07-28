@@ -4,6 +4,8 @@ from .user import User
 from flask import Blueprint
 from flask_restful import Api
 from .payment import Payment
+from .leaderboard import LeaderboardEntry
+# from .stats import UserStats
 
 
 # Create main API blueprint

@@ -3,6 +3,7 @@ from flask import Blueprint
 from resources.learner.badges import BadgeListResource, BadgeResource
 from resources.auth import SignupResource, LoginResource, MeResource, ChangePasswordResource, LogoutResource
 from resources.admin.users import ApproveUser
+from resources.learner.leaderboard import leaderboard_bp
 
 
 api_bp = Blueprint("api", __name__)
@@ -19,6 +20,10 @@ api.add_resource(LoginResource, '/auth/login')
 api.add_resource(MeResource, '/me')
 api.add_resource(ChangePasswordResource, '/change-password')
 api.add_resource(LogoutResource, "/logout")
+
+# Register the leaderboard blueprint
+api_bp.register_blueprint(leaderboard_bp, url_prefix="/leaderboard")
+
 
 # Admin approving users
 api.add_resource(ApproveUser, "/admin/users/<int:user_id>/approve")
