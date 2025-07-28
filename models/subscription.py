@@ -13,5 +13,10 @@ class Subscription(db.Model):
     end_date = db.Column(db.DateTime)
     active = db.Column(db.Boolean, default=True)
 
+    subscribed_at = db.Column(db.DateTime, default=datetime.utcnow)
+    expires_at = db.Column(db.DateTime)
+
+    user = db.relationship("User", back_populates="subscriptions")
+
     def __repr__(self):
         return f"<Subscription {self.plan} - {self.billing_cycle}>"
