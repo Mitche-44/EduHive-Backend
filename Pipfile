@@ -16,6 +16,8 @@ flask-restful = "*"
 flask-bcrypt = "*"
 pyjwt = "*"
 flask-cors = "*"
+google-auth = "*"
+google-auth-oauthlib = "*"
 
 [dev-packages]
 

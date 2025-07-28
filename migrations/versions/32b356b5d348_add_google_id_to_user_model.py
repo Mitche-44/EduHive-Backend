@@ -1,8 +1,8 @@
-"""migrate user model
+"""Add google_id to User model
 
-Revision ID: edb9f93cbf20
+Revision ID: 32b356b5d348
 Revises: 
-Create Date: 2025-07-25 23:19:00.570559
+Create Date: 2025-07-28 11:31:35.744976
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'edb9f93cbf20'
+revision = '32b356b5d348'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -24,10 +24,12 @@ def upgrade():
     sa.Column('last_name', sa.String(length=50), nullable=False),
     sa.Column('email', sa.String(length=120), nullable=False),
     sa.Column('password_hash', sa.String(length=128), nullable=False),
+    sa.Column('google_id', sa.String(), nullable=True),
     sa.Column('role', sa.String(length=20), nullable=True),
     sa.Column('is_approved', sa.Boolean(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('email')
+    sa.UniqueConstraint('email'),
+    sa.UniqueConstraint('google_id')
     )
     # ### end Alembic commands ###
 
