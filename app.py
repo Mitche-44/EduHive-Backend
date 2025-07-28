@@ -3,6 +3,7 @@ from config import Config
 from extensions import db, migrate, bcrypt, cors
 from flask_jwt_extended import JWTManager
 from resources import api_bp
+from models import leaderboard
 
 jwt = JWTManager()
 
