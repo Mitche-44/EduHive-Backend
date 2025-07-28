@@ -1,5 +1,6 @@
 
 import os
+import requests as pyrequests 
 from dotenv import load_dotenv
 load_dotenv()
 from flask import request
@@ -11,6 +12,9 @@ from utils.validators import validate_signup_data, validate_login_data
 from extensions import blacklist
 from google.oauth2 import id_token
 from google.auth.transport import requests as grequests
+
+
+
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
 
 
@@ -97,57 +101,67 @@ class LogoutResource(Resource):
 class GoogleLogin(Resource):
     def post(self):
         data = request.json
-        token = data.get("id_token")
+        code = data.get("code")
 
-        if not token:
-            return {"message": "Missing ID token"}, 400
+        if not code:
+            return {"message": "Missing authorization code"}, 400
 
         try:
-            # ✅ Verify token
-            idinfo = id_token.verify_oauth2_token(token, grequests.Request(), GOOGLE_CLIENT_ID)
+            # Step 1: Exchange code for tokens
+            token_url = "https://oauth2.googleapis.com/token"
+            redirect_uri = "postmessage"
+  # required for installed apps (like frontend SPAs)
+            client_id = os.getenv("GOOGLE_CLIENT_ID")
+            client_secret = os.getenv("GOOGLE_CLIENT_SECRET")
+
+            token_response = pyrequests.post(token_url, data={
+                "code": code,
+                "client_id": client_id,
+                "client_secret": client_secret,
+                "redirect_uri": redirect_uri,
+                "grant_type": "authorization_code"
+            })
+
+            if token_response.status_code != 200:
+                return {"message": "Failed to exchange code", "details": token_response.json()}, 400
+
+            tokens = token_response.json()
+            id_token_str = tokens.get("id_token")
+
+            # Step 2: Verify ID token
+            idinfo = id_token.verify_oauth2_token(id_token_str, grequests.Request(), client_id)
 
             google_id = idinfo["sub"]
             email = idinfo.get("email")
             first_name = idinfo.get("given_name", "")
             last_name = idinfo.get("family_name", "")
 
-            # ✅ Step 1: Try find user by google_id
+            # Step 3: Lookup or create user
             user = User.query.filter_by(google_id=google_id).first()
 
-            if user:
-                # ✅ Found: Log them in
-                access_token = create_access_token(identity=user.id)
-                return {"access_token": access_token, "user": user.to_dict()}, 200
-
-            # ✅ Step 2: Try find by email (existing non-Google user trying Google login)
             if not user and email:
                 user = User.query.filter_by(email=email).first()
+                if user:
+                    user.google_id = google_id
+                    db.session.commit()
 
-            if user:
-                # ✅ Upgrade existing user to have google_id
-                user.google_id = google_id
+            if not user:
+                user = User(
+                    first_name=first_name,
+                    last_name=last_name,
+                    email=email,
+                    google_id=google_id,
+                    password_hash='',
+                    role="learner",
+                    is_approved=True
+                )
+                db.session.add(user)
                 db.session.commit()
 
-                access_token = create_access_token(identity=user.id)
-                return {"access_token": access_token, "user": user.to_dict()}, 200
-
-            # ✅ Step 3: Register new Google user
-            user = User(
-                first_name=first_name,
-                last_name=last_name,
-                email=email,
-                google_id=google_id,
-                password_hash='',  # No password for Google
-                role="learner",
-                is_approved=True
-            )
-            db.session.add(user)
-            db.session.commit()
-
             access_token = create_access_token(identity=user.id)
-            return {"access_token": access_token, "user": user.to_dict()}, 201
+            return {"access_token": access_token, "user": user.to_dict()}, 200
 
-        except ValueError as e:
-            return {"message": "Invalid token", "error": str(e)}, 400
+        except Exception as e:
+            return {"message": "Google login failed", "error": str(e)}, 400
 
 
