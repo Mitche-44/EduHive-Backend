@@ -1,8 +1,8 @@
-"""Add google_id to User model
+"""migrate user model
 
-Revision ID: 32b356b5d348
+Revision ID: ca0e895b58e1
 Revises: 
-Create Date: 2025-07-28 11:31:35.744976
+Create Date: 2025-07-29 13:27:33.313787
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '32b356b5d348'
+revision = 'ca0e895b58e1'
 down_revision = None
 branch_labels = None
 depends_on = None

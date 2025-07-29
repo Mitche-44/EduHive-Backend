@@ -1,21 +1,23 @@
-
 import os
 import requests as pyrequests 
 from dotenv import load_dotenv
 load_dotenv()
+
 from flask import request
 from flask_restful import Resource
-from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity, get_jwt
+from flask_jwt_extended import (
+    create_access_token, jwt_required,
+    get_jwt_identity, get_jwt
+)
+
 from models.user import User
-from extensions import db
+from extensions import db, blacklist
 from utils.validators import validate_signup_data, validate_login_data
-from extensions import blacklist
 from google.oauth2 import id_token
 from google.auth.transport import requests as grequests
 
-
-
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
+GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
 
 
 class SignupResource(Resource):
@@ -30,13 +32,15 @@ class SignupResource(Resource):
                 first_name=data["first_name"],
                 last_name=data["last_name"],
                 email=data["email"],
+                password_hash=''
             )
-            user.password = data["password"]  # uses setter
+            user.password = data["password"]
 
             db.session.add(user)
             db.session.commit()
 
-            access_token = create_access_token(identity=user.id)
+            access_token = create_access_token(identity=user)
+
             return {"user": user.to_dict(), "access_token": access_token}, 201
 
         except Exception as e:
@@ -54,26 +58,29 @@ class LoginResource(Resource):
         user = User.query.filter_by(email=data["email"]).first()
 
         if user and user.check_password(data["password"]):
-            access_token = create_access_token(identity=user.id)
+            access_token = create_access_token(identity=user)
             return {"user": user.to_dict(), "access_token": access_token}, 200
+
         return {"message": "Invalid credentials"}, 401
-    
+
+
 class MeResource(Resource):
     @jwt_required()
     def get(self):
-        user_id = get_jwt_identity()
-        user = User.query.get(user_id)
+        identity = get_jwt_identity()
+        user = User.query.get(identity["id"])
 
         if not user:
             return {"message": "User not found"}, 404
-        
+
         return user.to_dict(), 200
-    
+
+
 class ChangePasswordResource(Resource):
     @jwt_required()
     def put(self):
-        user_id = get_jwt_identity()
-        user = User.query.get(user_id)
+        identity = get_jwt_identity()
+        user = User.query.get(identity["id"])
 
         data = request.get_json()
         current_password = data.get("current_password")
@@ -85,10 +92,11 @@ class ChangePasswordResource(Resource):
         if not user or not user.check_password(current_password):
             return {"message": "Current password is incorrect."}, 401
 
-        user.password = new_password  # Triggers setter to hash
+        user.password = new_password
         db.session.commit()
 
         return {"message": "Password updated successfully."}, 200
+
 
 class LogoutResource(Resource):
     @jwt_required()
@@ -96,7 +104,7 @@ class LogoutResource(Resource):
         jti = get_jwt()["jti"]
         blacklist.add(jti)
         return {"message": "Successfully logged out"}, 200
-    
+
 
 class GoogleLogin(Resource):
     def post(self):
@@ -107,20 +115,17 @@ class GoogleLogin(Resource):
             return {"message": "Missing authorization code"}, 400
 
         try:
-            # Step 1: Exchange code for tokens
-            token_url = "https://oauth2.googleapis.com/token"
-            redirect_uri = "postmessage"
-  # required for installed apps (like frontend SPAs)
-            client_id = os.getenv("GOOGLE_CLIENT_ID")
-            client_secret = os.getenv("GOOGLE_CLIENT_SECRET")
-
-            token_response = pyrequests.post(token_url, data={
-                "code": code,
-                "client_id": client_id,
-                "client_secret": client_secret,
-                "redirect_uri": redirect_uri,
-                "grant_type": "authorization_code"
-            })
+            # Exchange code for tokens
+            token_response = pyrequests.post(
+                "https://oauth2.googleapis.com/token",
+                data={
+                    "code": code,
+                    "client_id": GOOGLE_CLIENT_ID,
+                    "client_secret": GOOGLE_CLIENT_SECRET,
+                    "redirect_uri": "postmessage",
+                    "grant_type": "authorization_code"
+                }
+            )
 
             if token_response.status_code != 200:
                 return {"message": "Failed to exchange code", "details": token_response.json()}, 400
@@ -128,15 +133,13 @@ class GoogleLogin(Resource):
             tokens = token_response.json()
             id_token_str = tokens.get("id_token")
 
-            # Step 2: Verify ID token
-            idinfo = id_token.verify_oauth2_token(id_token_str, grequests.Request(), client_id)
+            idinfo = id_token.verify_oauth2_token(id_token_str, grequests.Request(), GOOGLE_CLIENT_ID)
 
             google_id = idinfo["sub"]
             email = idinfo.get("email")
             first_name = idinfo.get("given_name", "")
             last_name = idinfo.get("family_name", "")
 
-            # Step 3: Lookup or create user
             user = User.query.filter_by(google_id=google_id).first()
 
             if not user and email:
@@ -158,10 +161,8 @@ class GoogleLogin(Resource):
                 db.session.add(user)
                 db.session.commit()
 
-            access_token = create_access_token(identity=user.id)
+            access_token = create_access_token(identity=user)
             return {"access_token": access_token, "user": user.to_dict()}, 200
 
         except Exception as e:
             return {"message": "Google login failed", "error": str(e)}, 400
-
-
