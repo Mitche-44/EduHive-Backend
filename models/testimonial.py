@@ -15,3 +15,15 @@ class Testimonial(db.Model):
 
     is_approved = db.Column(db.Boolean, default=False)
     is_featured = db.Column(db.Boolean, default=False)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "role": self.role,
+            "image_url": self.image_url,
+            "text": self.text,
+            "created_at": self.created_at.isoformat(),
+            "is_approved": self.is_approved,
+            "is_featured": self.is_featured,
+        }
