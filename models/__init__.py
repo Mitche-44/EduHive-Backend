@@ -4,7 +4,7 @@ from .user import User
 from flask import Blueprint
 from flask_restful import Api
 from .payment import Payment
-
+from .community import CommunityPost, Comment
 
 # Create main API blueprint
 api_bp = Blueprint('api', __name__)

@@ -16,6 +16,8 @@ flask-restful = "*"
 flask-bcrypt = "*"
 pyjwt = "*"
 flask-cors = "*"
+flask-socketio = "*"
+eventlet = "*"
 
 [dev-packages]
 

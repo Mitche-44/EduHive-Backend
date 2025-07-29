@@ -3,6 +3,7 @@ from flask import Blueprint
 from resources.learner.badges import BadgeListResource, BadgeResource
 from resources.auth import SignupResource, LoginResource, MeResource, ChangePasswordResource, LogoutResource
 from resources.admin.users import ApproveUser
+from resources.learner.community import CommunityPostsResource, LikePostResource, PostCommentResource
 
 
 api_bp = Blueprint("api", __name__)
@@ -19,6 +20,11 @@ api.add_resource(LoginResource, '/auth/login')
 api.add_resource(MeResource, '/me')
 api.add_resource(ChangePasswordResource, '/change-password')
 api.add_resource(LogoutResource, "/logout")
+
+#community
+api.add_resource(CommunityPostsResource, '/community/posts')
+api.add_resource(LikePostResource, '/community/posts/<int:post_id>/like')
+api.add_resource(PostCommentResource, '/community/posts/<int:post_id>/comment')
 
 # Admin approving users
 api.add_resource(ApproveUser, "/admin/users/<int:user_id>/approve")
