@@ -8,6 +8,9 @@ Flask-Migrate==4.0.5
 Flask-Bcrypt==1.0.1
 Flask-JWT-Extended==4.5.2
 
+# Serialization for quiz models (ADD THIS LINE)
+SQLAlchemy-serializer==1.4.1
+
 # Configuration and utilities
 python-decouple==3.8
 requests==2.31.0
