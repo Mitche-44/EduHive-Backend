@@ -7,7 +7,6 @@ name = "pypi"
 psycopg2-binary = "*"
 werkzeug = "*"
 pyjwt = "*"
-google-auth = "*"
 google-auth-oauthlib = "*"
 flask-mail = "*"
 flask-socketio = "*"
@@ -24,6 +23,7 @@ requests = "==2.31.0"
 cryptography = ">=3.4.8"
 python-dotenv = "==1.0.0"
 sqlalchemy-serializer = "*"
+google-auth = "*"
 
 [dev-packages]
 
