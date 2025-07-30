@@ -1,8 +1,8 @@
-"""run all migrations
+"""merge Natasha's branch
 
-Revision ID: 1ef395ed0034
+Revision ID: 6f91faef417d
 Revises: 
-Create Date: 2025-07-30 14:16:12.644108
+Create Date: 2025-07-30 18:09:33.027175
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '1ef395ed0034'
+revision = '6f91faef417d'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -91,17 +91,6 @@ def upgrade():
     sa.UniqueConstraint('email'),
     sa.UniqueConstraint('google_id')
     )
-    op.create_table('community_posts',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('title', sa.String(length=200), nullable=False),
-    sa.Column('content', sa.Text(), nullable=True),
-    sa.Column('author_id', sa.Integer(), nullable=False),
-    sa.Column('forum', sa.String(length=50), nullable=True),
-    sa.Column('created_at', sa.DateTime(), nullable=True),
-    sa.Column('likes', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['author_id'], ['users.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
     op.create_table('leaderboard_entries',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
@@ -142,14 +131,73 @@ def upgrade():
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('comments',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('post_id', sa.Integer(), nullable=False),
-    sa.Column('author_id', sa.Integer(), nullable=False),
-    sa.Column('content', sa.Text(), nullable=False),
+    op.create_table('quizzes',
+    sa.Column('id', sa.String(length=50), nullable=False),
+    sa.Column('unit', sa.String(length=10), nullable=False),
+    sa.Column('subject', sa.String(length=200), nullable=False),
+    sa.Column('description', sa.Text(), nullable=True),
+    sa.Column('issue_date', sa.DateTime(), nullable=False),
+    sa.Column('deadline', sa.DateTime(), nullable=False),
+    sa.Column('total_questions', sa.Integer(), nullable=True),
+    sa.Column('passing_score', sa.Integer(), nullable=True),
+    sa.Column('time_limit', sa.Integer(), nullable=True),
+    sa.Column('max_attempts', sa.Integer(), nullable=True),
+    sa.Column('is_active', sa.Boolean(), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=True),
-    sa.ForeignKeyConstraint(['author_id'], ['users.id'], ),
-    sa.ForeignKeyConstraint(['post_id'], ['community_posts.id'], ),
+    sa.Column('updated_at', sa.DateTime(), nullable=True),
+    sa.Column('module_id', sa.Integer(), nullable=True),
+    sa.Column('created_by', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['created_by'], ['users.id'], ),
+    sa.ForeignKeyConstraint(['module_id'], ['modules.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('quiz_attempts',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('attempt_number', sa.Integer(), nullable=False),
+    sa.Column('status', sa.String(length=20), nullable=True),
+    sa.Column('score', sa.Float(), nullable=True),
+    sa.Column('total_points', sa.Integer(), nullable=True),
+    sa.Column('max_points', sa.Integer(), nullable=True),
+    sa.Column('correct_answers', sa.Integer(), nullable=True),
+    sa.Column('total_questions', sa.Integer(), nullable=True),
+    sa.Column('time_started', sa.DateTime(), nullable=True),
+    sa.Column('time_completed', sa.DateTime(), nullable=True),
+    sa.Column('time_taken', sa.Integer(), nullable=True),
+    sa.Column('ip_address', sa.String(length=45), nullable=True),
+    sa.Column('user_agent', sa.String(length=500), nullable=True),
+    sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.Column('quiz_id', sa.String(length=50), nullable=False),
+    sa.ForeignKeyConstraint(['quiz_id'], ['quizzes.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('quiz_questions',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('question_text', sa.Text(), nullable=False),
+    sa.Column('question_type', sa.String(length=50), nullable=True),
+    sa.Column('options', sa.JSON(), nullable=True),
+    sa.Column('correct_answer', sa.Integer(), nullable=True),
+    sa.Column('correct_answer_text', sa.Text(), nullable=True),
+    sa.Column('explanation', sa.Text(), nullable=True),
+    sa.Column('points', sa.Integer(), nullable=True),
+    sa.Column('difficulty', sa.String(length=20), nullable=True),
+    sa.Column('order_index', sa.Integer(), nullable=True),
+    sa.Column('created_at', sa.DateTime(), nullable=True),
+    sa.Column('quiz_id', sa.String(length=50), nullable=False),
+    sa.ForeignKeyConstraint(['quiz_id'], ['quizzes.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('question_attempts',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('user_answer', sa.Text(), nullable=True),
+    sa.Column('is_correct', sa.Boolean(), nullable=True),
+    sa.Column('points_earned', sa.Integer(), nullable=True),
+    sa.Column('time_spent', sa.Integer(), nullable=True),
+    sa.Column('created_at', sa.DateTime(), nullable=True),
+    sa.Column('quiz_attempt_id', sa.Integer(), nullable=False),
+    sa.Column('question_id', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['question_id'], ['quiz_questions.id'], ),
+    sa.ForeignKeyConstraint(['quiz_attempt_id'], ['quiz_attempts.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###
@@ -157,11 +205,13 @@ def upgrade():
 
 def downgrade():
     # ### commands auto generated by Alembic - please adjust! ###
-    op.drop_table('comments')
+    op.drop_table('question_attempts')
+    op.drop_table('quiz_questions')
+    op.drop_table('quiz_attempts')
+    op.drop_table('quizzes')
     op.drop_table('subscriptions')
     op.drop_table('modules')
     op.drop_table('leaderboard_entries')
-    op.drop_table('community_posts')
     op.drop_table('users')
     op.drop_table('testimonials')
     op.drop_table('testimonial')
