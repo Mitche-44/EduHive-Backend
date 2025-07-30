@@ -2,8 +2,6 @@ from extensions import db, bcrypt
 from sqlalchemy_serializer import SerializerMixin
 
 
-
-
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
 
@@ -15,6 +13,9 @@ class User(db.Model, SerializerMixin):
     google_id = db.Column(db.String, unique=True) 
     role = db.Column(db.String(20), default='learner')
     is_approved = db.Column(db.Boolean, default=False)
+    
+    # Add the missing total_xp field
+    total_xp = db.Column(db.Integer, default=0, nullable=False)
 
     # Relationship to leaderboard
     leaderboard_entries = db.relationship("LeaderboardEntry", back_populates="user", cascade="all, delete-orphan", lazy=True)

@@ -10,7 +10,6 @@ pyjwt = "*"
 google-auth = "*"
 google-auth-oauthlib = "*"
 flask-mail = "*"
-
 flask-socketio = "*"
 eventlet = "*"
 flask = "==2.3.3"
@@ -23,13 +22,8 @@ flask-jwt-extended = "==4.5.2"
 python-decouple = "==3.8"
 requests = "==2.31.0"
 cryptography = ">=3.4.8"
-python-dotenv = "==1.0.0"
 sqlalchemy-serializer = "*"
-
 python-dotenv = "*"
-requests = "*"
-python-decouple = "*"
-
 
 [dev-packages]
 
