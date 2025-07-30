@@ -18,6 +18,7 @@ class User(db.Model, SerializerMixin):
 
     # Relationship to leaderboard
     leaderboard_entries = db.relationship("LeaderboardEntry", back_populates="user", cascade="all, delete-orphan", lazy=True)
+    
 
     subscriptions = db.relationship("Subscription", back_populates="user", cascade="all, delete-orphan")
 
