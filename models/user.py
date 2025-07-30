@@ -13,6 +13,9 @@ class User(db.Model, SerializerMixin):
     role = db.Column(db.String(20), default='learner')
     is_approved = db.Column(db.Boolean, default=False)
 
+    # Relationship to leaderboard
+    leaderboard_entries = db.relationship("LeaderboardEntry", back_populates="user", cascade="all, delete-orphan", lazy=True)
+
     serialize_rules = ('-password_hash',)
 
     @property
@@ -25,6 +28,10 @@ class User(db.Model, SerializerMixin):
 
     def check_password(self, attempted_password):
         return bcrypt.check_password_hash(self.password_hash, attempted_password)
+    
+    @property
+    def full_name(self):
+        return f"{self.first_name} {self.last_name}"
 
     def __repr__(self):
         return f"<User {self.email}>"

@@ -9,15 +9,22 @@ flask-jwt-extended = "*"
 flask-sqlalchemy = "*"
 psycopg2-binary = "*"
 werkzeug = "*"
-python-dotenv = "*"
 sqlalchemy-serializer = "*"
 flask-migrate = "*"
 flask-restful = "*"
 flask-bcrypt = "*"
 pyjwt = "*"
 flask-cors = "*"
+
 google-auth = "*"
 google-auth-oauthlib = "*"
+
+flask-mail = "*"
+python-dotenv = "*"
+requests = "*"
+python-decouple = "*"
+flask-socketio = "*"
+eventlet = "*"
 
 [dev-packages]
 

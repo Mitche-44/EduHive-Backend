@@ -1,5 +1,6 @@
 from app import create_app
 from extensions import db
+
 from models.user import User  # Adjust the path if needed
 
 def seed_users():
@@ -46,3 +47,4 @@ if __name__ == "__main__":
         db.create_all()
 
         seed_users()
+
