@@ -3,6 +3,7 @@ from flask import Blueprint
 from resources.auth import SignupResource, LoginResource, MeResource, ChangePasswordResource, LogoutResource
 from resources.admin.users import ApproveUser
 from resources.auth import GoogleLogin
+from resources.contributor.modules import ContributorModuleListResource, ContributorModuleResource
 
 api_bp = Blueprint("api", __name__)
 api = Api(api_bp)
@@ -17,3 +18,7 @@ api.add_resource(LogoutResource, "/logout")
 api.add_resource(ApproveUser, "/admin/users/<int:user_id>/approve")
 
 api.add_resource(GoogleLogin, "/auth/google-login")
+
+# contributor modules
+api.add_resource(ContributorModuleListResource, "/contributor/modules")
+api.add_resource(ContributorModuleResource, "/contributor/modules/<int:module_id>")
