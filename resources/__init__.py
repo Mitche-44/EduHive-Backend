@@ -5,9 +5,15 @@ from resources.auth import SignupResource, LoginResource, MeResource, ChangePass
 from resources.admin.users import ApproveUser
 from resources.learner.leaderboard import leaderboard_bp
 from resources.public.newsletter import newsletter_bp
-from resources.learner.subscriptions import subscription_bp
+# from resources.learner.subscriptions import subscription_bp
 from resources.public.testimonial import testimonial_bp
 from resources.admin.testimonial_admin import admin_testimonial_bp
+from resources.admin.subscriptions import admin_subscriptions_bp
+from resources.admin.admin_leaderboard import admin_leaderboard_bp
+from resources.admin.testimonial_admin import admin_testimonial_bp
+from resources.admin.subscriptions import admin_subscriptions_bp
+from resources.admin.admin_leaderboard import admin_leaderboard_bp
+
 
 
 
@@ -29,11 +35,15 @@ api.add_resource(LogoutResource, "/logout")
 
 api_bp.register_blueprint(leaderboard_bp, url_prefix="/leaderboard")# Register the leaderboard blueprint
 api_bp.register_blueprint(newsletter_bp, url_prefix="/newsletter")  # Register the newsletter blueprint
-api_bp.register_blueprint(subscription_bp, url_prefix="/subscription")  # Register the subscription blueprint
+# api_bp.register_blueprint(subscription_bp, url_prefix="/subscription")  # Register the subscription blueprint
+api_bp.register_blueprint(admin_subscriptions_bp, url_prefix="/admin/subscriptions")  # Register the admin subscriptions blueprint
+api_bp.register_blueprint(admin_leaderboard_bp, url_prefix="/admin/leaderboard")  # Register the admin leaderboard blueprint
 api_bp.register_blueprint(testimonial_bp, url_prefix="/testimonials")  # Register the testimonial blueprint
 
 
+
 api_bp.register_blueprint(admin_testimonial_bp, url_prefix="/admin/testimonials")  # Register the admin testimonial blueprint
+
 
 
 # Admin approving users

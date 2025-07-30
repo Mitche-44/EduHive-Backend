@@ -58,3 +58,28 @@ def create_testimonial():
     db.session.commit()
 
     return jsonify({"message": "Testimonial submitted successfully."}), 201
+
+
+
+from extensions import db
+from datetime import datetime
+
+class Testimonial(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_name = db.Column(db.String(100), nullable=False)
+    message = db.Column(db.Text, nullable=False)
+    rating = db.Column(db.Integer, nullable=False)
+    approved = db.Column(db.Boolean, default=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "user_name": self.user_name,
+            "message": self.message,
+            "rating": self.rating,
+            "approved": self.approved,
+            "created_at": self.created_at.isoformat(),
+        }
+    def __repr__(self):
+        return f"<Testimonial {self.id} - {self.user_name}>"
