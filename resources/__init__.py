@@ -5,6 +5,24 @@ from resources.auth import SignupResource, LoginResource, MeResource, ChangePass
 from resources.admin.users import ApproveUser
 from resources.learner.community import CommunityPostsResource, LikePostResource, PostCommentResource
 
+from resources.auth import GoogleLogin
+from resources.contributor.modules import ContributorModuleListResource, ContributorModuleResource
+
+from resources.learner.leaderboard import leaderboard_bp
+from resources.public.newsletter import newsletter_bp
+# from resources.learner.subscriptions import subscription_bp
+from resources.public.testimonial import testimonial_bp
+from resources.admin.testimonial_admin import admin_testimonial_bp
+from resources.admin.subscriptions import admin_subscriptions_bp
+from resources.admin.admin_leaderboard import admin_leaderboard_bp
+from resources.admin.testimonial_admin import admin_testimonial_bp
+from resources.admin.subscriptions import admin_subscriptions_bp
+from resources.admin.admin_leaderboard import admin_leaderboard_bp
+
+
+
+
+
 
 api_bp = Blueprint("api", __name__)
 api = Api(api_bp)
@@ -26,11 +44,35 @@ api.add_resource(CommunityPostsResource, '/community/posts')
 api.add_resource(LikePostResource, '/community/posts/<int:post_id>/like')
 api.add_resource(PostCommentResource, '/community/posts/<int:post_id>/comment')
 
+#leaderboard
+api_bp.register_blueprint(leaderboard_bp, url_prefix="/leaderboard")# Register the leaderboard blueprint
+api_bp.register_blueprint(newsletter_bp, url_prefix="/newsletter")  # Register the newsletter blueprint
+
+# api_bp.register_blueprint(subscription_bp, url_prefix="/subscription")  # Register the subscription blueprint
+api_bp.register_blueprint(admin_subscriptions_bp, url_prefix="/admin/subscriptions")  # Register the admin subscriptions blueprint
+api_bp.register_blueprint(admin_leaderboard_bp, url_prefix="/admin/leaderboard")  # Register the admin leaderboard blueprint
+api_bp.register_blueprint(testimonial_bp, url_prefix="/testimonials")  # Register the testimonial blueprint
+
+
+
+api_bp.register_blueprint(admin_testimonial_bp, url_prefix="/admin/testimonials")  # Register the admin testimonial blueprint
+
+
+
+
 # Admin approving users
 api.add_resource(ApproveUser, "/admin/users/<int:user_id>/approve")
+
+
+api.add_resource(GoogleLogin, "/auth/google-login")
+
+# contributor modules
+api.add_resource(ContributorModuleListResource, "/contributor/modules")
+api.add_resource(ContributorModuleResource, "/contributor/modules/<int:module_id>")
 
 
 
 # Import your resources here when you create them
 # from .user_resources import UserResource
 # api.add_resource(UserResource, '/users')
+

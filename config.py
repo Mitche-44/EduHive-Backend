@@ -14,6 +14,10 @@ class Config:
     JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
     JWT_BLACKLIST_ENABLED = True
     JWT_BLACKLIST_TOKEN_CHECKS = ["access"]
+
+    GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
+    GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
+
     SQLALCHEMY_ENGINE_OPTIONS = {
         'pool_pre_ping': True,
         'pool_recycle': 300,
@@ -32,6 +36,18 @@ class Config:
     MPESA_CALLBACK_URL = config('MPESA_CALLBACK_URL', default='http://localhost:5000/api/mpesa/callback')
     MPESA_TIMEOUT_URL = config('MPESA_TIMEOUT_URL', default='http://localhost:5000/api/mpesa/timeout')
     
+    # Mailchimp Configuration
+    SQLALCHEMY_DATABASE_URI = config("DATABASE_URL")
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    MAIL_SERVER = config("MAIL_SERVER", default="smtp.gmail.com")
+    MAIL_PORT = config("MAIL_PORT", default=587, cast=int)
+    MAIL_USE_TLS = True
+    MAIL_USERNAME = config("MAIL_USERNAME")
+    MAIL_PASSWORD = config("MAIL_PASSWORD")
+
+
+
+
     # Other configurations
     DEBUG = config('DEBUG', default=True, cast=bool)
     PORT = config('PORT', default=5000, cast=int)
@@ -66,3 +82,4 @@ config_dict = {
     'testing': TestingConfig,
     'default': DevelopmentConfig
 }
+

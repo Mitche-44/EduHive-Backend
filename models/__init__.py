@@ -1,10 +1,24 @@
+
+from .user import User
+from .module import Module
+
 # add all other models here
+from extensions import db
 from .badge import Badge
 from .user import User
 from flask import Blueprint
 from flask_restful import Api
 from .payment import Payment
 from .community import CommunityPost, Comment
+from .leaderboard import LeaderboardEntry
+from .newsletter import NewsletterSubscriber  # Import the newsletter subscriber model
+from .subscription import Subscription
+from .testimonial import Testimonial
+
+
+# from .stats import UserStats
+
+
 
 # Create main API blueprint
 api_bp = Blueprint('api', __name__)
