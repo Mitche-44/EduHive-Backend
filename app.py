@@ -1,5 +1,5 @@
 # app.py or main.py
-from flask import Flask
+from flask import Flask, jsonify
 from config import Config
 from extensions import db, migrate, bcrypt, cors, mail, socketio
 
@@ -7,7 +7,7 @@ from flask_jwt_extended import JWTManager
 from flask_socketio import SocketIO
 from resources import api_bp
 from models import leaderboard
-from models import newsletter   
+from models import newsletter
 from models import subscription
 from models import testimonial
 from resources.admin.testimonial_admin import admin_testimonial_bp
@@ -46,7 +46,7 @@ def create_app():
     # Register blueprints here later
     # from resources.customers import customers_bp
     # app.register_blueprint(customers_bp, url_prefix="/api/customers")
-    
+
     #  Add root route here
     @app.route("/")
     def index():
