@@ -3,6 +3,10 @@ from flask import Blueprint
 from resources.learner.badges import BadgeListResource, BadgeResource
 from resources.auth import SignupResource, LoginResource, MeResource, ChangePasswordResource, LogoutResource
 from resources.admin.users import ApproveUser
+
+from resources.auth import GoogleLogin
+from resources.contributor.modules import ContributorModuleListResource, ContributorModuleResource
+
 from resources.learner.leaderboard import leaderboard_bp
 from resources.public.newsletter import newsletter_bp
 # from resources.learner.subscriptions import subscription_bp
@@ -13,6 +17,7 @@ from resources.admin.admin_leaderboard import admin_leaderboard_bp
 from resources.admin.testimonial_admin import admin_testimonial_bp
 from resources.admin.subscriptions import admin_subscriptions_bp
 from resources.admin.admin_leaderboard import admin_leaderboard_bp
+
 
 
 
@@ -50,8 +55,16 @@ api_bp.register_blueprint(admin_testimonial_bp, url_prefix="/admin/testimonials"
 api.add_resource(ApproveUser, "/admin/users/<int:user_id>/approve")
 
 
+api.add_resource(GoogleLogin, "/auth/google-login")
+
+# contributor modules
+api.add_resource(ContributorModuleListResource, "/contributor/modules")
+api.add_resource(ContributorModuleResource, "/contributor/modules/<int:module_id>")
+=======
+
 
 
 # Import your resources here when you create them
 # from .user_resources import UserResource
 # api.add_resource(UserResource, '/users')
+

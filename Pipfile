@@ -15,6 +15,10 @@ flask-restful = "*"
 flask-bcrypt = "*"
 pyjwt = "*"
 flask-cors = "*"
+
+google-auth = "*"
+google-auth-oauthlib = "*"
+
 flask-mail = "*"
 python-dotenv = "*"
 requests = "*"

@@ -9,6 +9,7 @@ class User(db.Model, SerializerMixin):
     last_name = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
+    google_id = db.Column(db.String, unique=True) 
     role = db.Column(db.String(20), default='learner')
     is_approved = db.Column(db.Boolean, default=False)
 

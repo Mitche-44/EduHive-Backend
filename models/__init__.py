@@ -1,3 +1,7 @@
+
+from .user import User
+from .module import Module
+
 # add all other models here
 from extensions import db
 from .badge import Badge
