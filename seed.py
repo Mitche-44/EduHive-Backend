@@ -1,9 +1,7 @@
 from app import create_app
 from extensions import db
-from models.user import User
-from datetime import datetime, timedelta
-from models.quiz import Quiz, QuizQuestion,QuestionAttempt
-from models.quiz_attempt import QuizAttempt
+
+from models.user import User  # Adjust the path if needed
 
 def seed_users():
     users = [
@@ -25,6 +23,7 @@ def seed_users():
             first_name="Charlie",
             last_name="Learner",
             email="learner@example.com",
+            
             role="learner",
             is_approved=True
         )
@@ -40,3 +39,11 @@ def seed_users():
 
     print("✅ Seeded users with roles: admin, contributor, learner.")
 
+if __name__ == "__main__":
+    app = create_app()
+    with app.app_context():
+        # Drop and recreate tables for fresh seeding — only use in dev
+        db.drop_all()
+        db.create_all()
+
+        seed_users()
