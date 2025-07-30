@@ -1,6 +1,9 @@
 from extensions import db, bcrypt
 from sqlalchemy_serializer import SerializerMixin
 
+
+
+
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
 
@@ -16,6 +19,9 @@ class User(db.Model, SerializerMixin):
     # Relationship to leaderboard
     leaderboard_entries = db.relationship("LeaderboardEntry", back_populates="user", cascade="all, delete-orphan", lazy=True)
 
+    subscriptions = db.relationship("Subscription", back_populates="user", cascade="all, delete-orphan")
+
+    
     serialize_rules = ('-password_hash',)
 
     @property
