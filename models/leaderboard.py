@@ -1,5 +1,6 @@
 from extensions import db
 from datetime import datetime
+from .user import User 
 
 class LeaderboardEntry(db.Model):
     __tablename__ = 'leaderboard_entries'

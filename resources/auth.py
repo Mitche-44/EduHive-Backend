@@ -39,7 +39,7 @@ class SignupResource(Resource):
             db.session.add(user)
             db.session.commit()
 
-            access_token = create_access_token(identity=user)
+            access_token = create_access_token(identity={"id": user.id, "role": user.role})
 
             return {"user": user.to_dict(), "access_token": access_token}, 201
 
@@ -58,7 +58,7 @@ class LoginResource(Resource):
         user = User.query.filter_by(email=data["email"]).first()
 
         if user and user.check_password(data["password"]):
-            access_token = create_access_token(identity=user)
+            access_token = create_access_token(identity={"id": user.id, "role": user.role})
             return {"user": user.to_dict(), "access_token": access_token}, 200
 
         return {"message": "Invalid credentials"}, 401
@@ -68,7 +68,8 @@ class MeResource(Resource):
     @jwt_required()
     def get(self):
         identity = get_jwt_identity()
-        user = User.query.get(identity["id"])
+        user_id = identity.get("id") if isinstance(identity, dict) else identity
+        user = User.query.get(user_id)
 
         if not user:
             return {"message": "User not found"}, 404
@@ -80,7 +81,8 @@ class ChangePasswordResource(Resource):
     @jwt_required()
     def put(self):
         identity = get_jwt_identity()
-        user = User.query.get(identity["id"])
+        user_id = identity.get("id") if isinstance(identity, dict) else identity
+        user = User.query.get(user_id)
 
         data = request.get_json()
         current_password = data.get("current_password")
@@ -161,7 +163,7 @@ class GoogleLogin(Resource):
                 db.session.add(user)
                 db.session.commit()
 
-            access_token = create_access_token(identity=user)
+            access_token = create_access_token(identity={"id": user.id, "role": user.role})
             return {"access_token": access_token, "user": user.to_dict()}, 200
 
         except Exception as e:
