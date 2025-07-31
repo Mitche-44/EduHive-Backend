@@ -4,13 +4,7 @@ from extensions import db, migrate, bcrypt, cors, mail, socketio
 from flask_jwt_extended import JWTManager
 from flask_socketio import SocketIO
 from resources import api_bp
-from models import leaderboard
-from models import newsletter
-from models import subscription
-from models import testimonial
-from resources.admin.testimonial_admin import admin_testimonial_bp
-from resources.admin.subscriptions import admin_subscriptions_bp
-from resources.admin.admin_leaderboard import admin_leaderboard_bp
+
 
 
 
@@ -43,9 +37,6 @@ def create_app():
     # app.register_blueprint(customers_bp, url_prefix="/api/customers")
 
     # ✅ Add root route here
-    @app.route("/")
-    def index():
-        return jsonify({"message": "EduHive API is running"}), 200
 
     return app
 
