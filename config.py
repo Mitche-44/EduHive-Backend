@@ -6,10 +6,8 @@ class Config:
     SECRET_KEY = config('SECRET_KEY', default='your-secret-key-here-change-in-production')
     
     # Database configuration
-    SQLALCHEMY_DATABASE_URI = config(
-        'DATABASE_URL', 
-        default='sqlite:///eduhive.db'  # Default SQLite database
-    )
+
+    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
     JWT_BLACKLIST_ENABLED = True
