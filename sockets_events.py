@@ -1,6 +1,21 @@
 from flask_socketio import SocketIO, emit
 
 def register_socket_events(socketio: SocketIO):
+    @socketio.on('connect')
+    def handle_connect():
+        emit("server_message", {"msg": "Connected to EduHive WebSocket!"})
+        print("[Socket] Client connected")
+
+    @socketio.on('disconnect')
+    def handle_disconnect():
+        emit("server_message", {"msg": "Disconnected from EduHive WebSocket!"})
+        print("[Socket] Client disconnected")
+
+    @socketio.on('subscribe_upgrade')
+    def handle_subscription_upgrade(data):
+        emit("subscription_updated", data, broadcast=True)
+        print(f"[Socket] Subscription upgraded: {data}")
+
     @socketio.on('new_post')
     def handle_new_post(data):
         if not data or 'title' not in data or 'author_id' not in data:

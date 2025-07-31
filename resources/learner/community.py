@@ -7,6 +7,9 @@ from models import User
 
 # GET all posts or filter by forum
 class CommunityPostsResource(Resource):
+    def options(self):
+        return {}, 200
+
     def get(self):
         forum = request.args.get('forum', 'general')
         posts = CommunityPost.query.filter_by(forum=forum).order_by(CommunityPost.created_at.desc()).all()
@@ -39,6 +42,9 @@ class CommunityPostsResource(Resource):
 
 
 class LikePostResource(Resource):
+    def options(self, post_id):
+        return {}, 200
+
     @jwt_required()
     def post(self, post_id):
         post = CommunityPost.query.get(post_id)
@@ -55,6 +61,9 @@ class LikePostResource(Resource):
 
 
 class PostCommentResource(Resource):
+    def options(self, post_id):
+        return {}, 200
+
     @jwt_required()
     def post(self, post_id):
         data = request.get_json()

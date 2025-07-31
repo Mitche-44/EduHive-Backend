@@ -11,7 +11,7 @@ from models import testimonial
 from resources.admin.testimonial_admin import admin_testimonial_bp
 from resources.admin.subscriptions import admin_subscriptions_bp
 from resources.admin.admin_leaderboard import admin_leaderboard_bp
-
+from sockets_events import register_socket_events 
 
 
 
@@ -31,18 +31,23 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
     bcrypt.init_app(app)
-    cors.init_app(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)
+    
+    #cors.init_app(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)
     socketio.init_app(app)
+ 
+    cors.init_app(app, resources={r"/api/*": {"origins": "http://localhost:5173"}}, supports_credentials=True)
 
-
-
+    
+     
     # from models import User, Product, CartItem, Order
 
     # Register blueprints here later
     # from resources.customers import customers_bp
     # app.register_blueprint(customers_bp, url_prefix="/api/customers")
 
-    # ✅ Add root route here
+    register_socket_events(socketio) 
+
+    # Add root route here
     @app.route("/")
     def index():
         return jsonify({"message": "EduHive API is running"}), 200
