@@ -14,7 +14,8 @@ eventlet = "*"
 flask = "==2.3.3"
 flask-restful = "==0.3.10"
 flask-cors = "==4.0.0"
-flask-sqlalchemy = "==3.0.5"
+flask-sqlalchemy = "==2.5.1"
+sqlalchemy = "==1.4.53"
 flask-migrate = "==4.0.5"
 flask-bcrypt = "==1.0.1"
 flask-jwt-extended = "==4.5.2"
@@ -29,4 +30,4 @@ cryptography = "*"
 [dev-packages]
 
 [requires]
-python_version = "3.11"
+python_version = "3.8"
