@@ -31,8 +31,20 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
     bcrypt.init_app(app)
-   # cors.init_app(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)
-    cors.init_app(app, resources={r"/api/*": {"origins": "http://localhost:5173"}}, supports_credentials=True)
+
+    cors.init_app(app, resources={
+    r"/api/*": {
+        "origins": [
+            "http://localhost:5173",
+            "https://eduhive-frontend.vercel.app"
+        ]
+    }
+      }, supports_credentials=True)
+
+    socketio.init_app(app, cors_allowed_origins=[
+    "http://localhost:5173",
+    "https://eduhive-frontend.vercel.app"
+     ])
 
     socketio.init_app(app)
     
