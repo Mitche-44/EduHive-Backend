@@ -1,71 +1,69 @@
 
-#  EduHive Backend (Flask API)
 
-EduHive is a **crowdsourced learning platform** with gamification, designed to help learners create, share, and engage with structured learning paths while earning points, badges, and competing on leaderboards. This repository contains the **Flask API** that powers the EduHive platform.
+# EduHive Backend (Flask API)
+
+EduHive is a **crowdsourced, gamified learning platform** that allows learners to explore curated paths, contributors to create educational content, and admins to manage the system through a robust backend. This repository contains the **Flask API** powering EduHive.
 
 ---
 
-##  Features
+## Features
 
-*  User authentication (JWT) and role management (Admin, Contributor, Learner)
+* JWT-based authentication with role management (`Admin`, `Contributor`, `Learner`)
+* Google OAuth integration
 * CRUD for Learning Paths, Modules, Quizzes, and Resources
-*  Gamification support: XP system, badges, achievements
-*  Community tools: Ratings, comments, discussions
-*  Leaderboards and challenge tracking
-* 🔧 Admin tools for moderation
+* Gamification: XP system, badges, and leaderboards
+* Real-time Community Discussions (Socket.IO)
+* Commenting, likes, and discussion forums
+* Admin tools for approval and moderation
+* Subscriptions, testimonials, newsletters
 
 ---
 
-##  Tech Stack
+## Tech Stack
 
-* **Python 3.11+**
-* **Flask**
-* **Flask-SQLAlchemy**
-* **Flask-Migrate**
-* **Flask-JWT-Extended**
-* **SerializerMixin** (for serialization)
-* **SQLite / PostgreSQL/PostMan** (switchable)
+* Python 3.11+
+* Flask, Flask-RESTful
+* Flask-JWT-Extended
+* Flask-SocketIO
+* SQLAlchemy and Flask-Migrate
+* PostgreSQL (via Supabase)
+* Marshmallow or SerializerMixin for serialization
+* Deployed on Render
 
 ---
 
-##  Setup Instructions
+## Setup Instructions
 
 ### 1. Clone the Repo
 
 ```bash
-git clone https://github.com/yourusername/EduHive-Backend.git
+git clone https://github.com/Mitche-44/EduHive-Backend.git
 
 cd EduHive-Backend
 ```
 
-### 2. Create and Activate a Virtual Environment
+### 2. Activate Environment and Install Dependencies
 
 ```bash
-
+pipenv install
 pipenv shell
-
-```
-### 3. Install Dependencies
-
-```bash
-pipenv install -r requirements.txt
 ```
 
-### 4. Set Environment Variables
+### 3. Set Up Environment Variables
 
-Create a `.env` file:
+Create a `.env` file in the root folder:
 
 ```env
 FLASK_ENV=development
 
-DATABASE_URL=sqlite:///eduhive.db
-
 SECRET_KEY=your_secret_key
 
-JWT_SECRET_KEY=your_jwt_key
+JWT_SECRET_KEY=your_jwt_secret
+
+DATABASE_URL=your_database_url
 ```
 
-### 5. Run Migrations
+### 4. Initialize the Database
 
 ```bash
 flask db init
@@ -73,81 +71,72 @@ flask db migrate -m "Initial migration"
 flask db upgrade
 ```
 
-### 6. Start the Server
+### 5. Run the Development Server
 
 ```bash
-flask run
+flask run or python app.py
 ```
 
-The API will be available at: `http://127.0.0.1:5000/`
+The server runs at `http://127.0.0.1:5000/`
 
 ---
 
-##  Folder Structure
+## Folder Structure
 
 ```
 EduHive-Backend/
-├── app/
-│   ├── models/              # SQLAlchemy models
-│   ├── routes/              # API route blueprints
-│   ├── schemas/             # Marshmallow schemas
-│   ├── utils/               # Helper functions
-│   └── __init__.py          # App factory
-├── migrations/              # Flask-Migrate files
+├── models/             # SQLAlchemy models
+├── resources/          # API route classes
+├── utils/              # Helpers, decorators, validators
+├── config.py           # App configuration
+├── app.py              # Main app entry
+├── migrations/         # Flask-Migrate DB files
 ├── requirements.txt
-├── .env
-└── run.py
+└── .env
 ```
 
 ---
 
-##  Roles & Permissions
+## Roles & Permissions
 
-* **Admin**: Moderate content, approve paths, manage badges/challenges
-* **Contributor**: Create learning paths, modules, and quizzes
-* **Learner**: Follow paths, earn XP, unlock badges, comment
-
----
-
-##  API Endpoints Overview (MVP)
-
-| Method | Endpoint             | Description                          |
-| ------ | -------------------- | ------------------------------------ |
-| POST   | `/auth/signup`       | User registration                    |
-| POST   | `/auth/login`        | User login (JWT token)               |
-| GET    | `/paths`             | List all learning paths              |
-| POST   | `/paths`             | Create a new learning path (contrib) |
-| GET    | `/leaderboard`       | Global leaderboard                   |
-| POST   | `/comments`          | Add comment to path/module           |
-| GET    | `/profile/<user_id>` | Get user profile & XP stats          |
+* **Admin**: Manage users, approve paths/posts, control platform settings
+* **Contributor**: Create paths, modules, and quizzes
+* **Learner**: Consume content, engage in discussions, earn badges
 
 ---
 
-##  MVP Checklist
+## Sample API Endpoints
 
-*  User authentication (JWT)
-*  Role-based access control
-*  Learning path and module CRUD
-*  Points/XP system
-*  Badge and achievement unlock
-*  Leaderboard and challenge logic
-*  Comment and rating system
-
----
-
-##  Related Repositories
-
-* [EduHive-Frontend](https://github.com/Mitche-44/EduHive-Frontend)
+| Method | Endpoint              | Description                        |
+| ------ | --------------------- | ---------------------------------- |
+| POST   | `/auth/register`      | Register a new user                |
+| POST   | `/auth/login`         | Authenticate user via JWT          |
+| POST   | `/auth/google-login`  | Login via Google OAuth             |
+| GET    | `/paths`              | Get all learning paths             |
+| POST   | `/paths`              | Create a new path (Contributor)    |
+| GET    | `/leaderboard`        | View global leaderboard            |
+| PATCH  | `/admin/approve/<id>` | Admin approval for user            |
+| POST   | `/community/post`     | Create a community discussion post |
 
 ---
 
-##  Contributing
+## Related Links
 
-1. Fork the project
-2. Create your feature branch (`git checkout -b feature/awesome-feature`)
-3. Commit your changes (`git commit -m 'Add awesome feature'`)
-4. Push to the branch (`git push origin feature/awesome-feature`)
-5. Open a Pull Request
+* **Frontend Repository:** [EduHive Frontend](https://github.com/Mitche-44/EduHive-Frontend)
+
+* **Frontend App:** [https://edu-hive-frontend.vercel.app](https://edu-hive-frontend.vercel.app)
+
+* **Supabase Project:** [View on Supabase](https://supabase.com/dashboard/project/srsiutpdrjvvafvjyhzu)
+
+---
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature-name`
+3. Commit your changes
+4. Push to your fork
+5. Open a pull request
 
 ---
 
@@ -156,4 +145,5 @@ EduHive-Backend/
 MIT License © 2025 EduHive Team
 
 ---
+
 
