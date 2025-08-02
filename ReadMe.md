@@ -5,7 +5,7 @@
 EduHive is a **crowdsourced, gamified learning platform** that allows learners to explore curated paths, contributors to create educational content, and admins to manage the system through a robust backend. This repository contains the **Flask API** powering EduHive.
 
 ---
-
+> **Note:** The free Render hosting tier does **not support WebSockets**, which may result in connection failures for real-time features. To ensure compatibility, consider using long polling as a fallback on the frontend, or upgrade to a hosting provider that supports WebSockets natively
 ## Features
 
 * JWT-based authentication with role management (`Admin`, `Contributor`, `Learner`)
